@@ -62,18 +62,19 @@ ui <- fluidPage(
 server <- function(input, output,session) {
   base<-c()
 
+  clock <- reactive({  invalidateLater(1000, session)})
   observeEvent(input$plot_click,{
     base <<- c(base,Sys.time())
   })
   
   output$dessin <- renderPlot({
-     invalidateLater(1000, session)
+   clock()
     genere_graph(c(base,Sys.time()))
     
   })
   
   output$compteur <- renderText({
-     invalidateLater(1000, session)
+    clock()
     # browser()
     if(is.null(base)){return(NULL)}
   # duree <- round(Sys.time()-  as.POSIXct(base[length(base)],origin = "1970-01-01"))
